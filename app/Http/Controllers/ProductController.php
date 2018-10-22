@@ -9,6 +9,19 @@ use App\User;
 
 class ProductController extends Controller
 {
+
+    private $myproducts;
+
+    public function __construct() {
+        
+        $this->middleware('auth');
+
+        $this->middleware(function ($request, $next) {
+                $this->myproducts = Auth::user()->products;
+                return $next($request);
+        });
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,8 +29,17 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //$products = Product::all();
-        return redirect('user');
+     
+        $ordersum = [];
+        foreach ($this->myproducts as $myproduct) {
+            $ordersum[] = $myproduct->pivot->subtotal;
+        }
+        $total = array_sum($ordersum);
+        $quantity = count($ordersum);
+
+        $products = Product::all();
+        return view('products.products')->with('total',$total)->with('quantity',$quantity)->with('myproducts',$this->myproducts)->with('products',$products);
+
     }
 
     /**
@@ -38,29 +60,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        if (Auth::check()) {
-            $user = Auth::user('id');
-        }
-
-        $product = $request->input('id');
-        $quantity = $request->input('quantity');
-        
-        $prod = Product::findOrFail($product);
-        $subtotal = $prod->price * $quantity;
-        //var_dump($subtotal); die();
-
-        $oldproduct = $user->products()
-            -> wherePivot('product_id', $product)->first();
-            //var_dump($oldproduct->pivot->quantity); die();
-        
-
-        if(!$oldproduct) {
-            $user->products()->attach($product, ['quantity' => $quantity, 'subtotal' => $subtotal]);
-        } else {
-            $quantity += $oldproduct->pivot->quantity;
-            $user->products()->updateExistingPivot($product, ['quantity' => $quantity, 'subtotal' => $subtotal]);
-        }
-        return redirect('user');
+       
     }
 
     /**
@@ -71,7 +71,16 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
+        $ordersum = [];
+        foreach ($this->myproducts as $myproduct) {
+            $ordersum[] = $myproduct->pivot->subtotal;
+        }
+        $total = array_sum($ordersum);
+        $quantity = count($ordersum);
+
+        $product = Product::findorFail($id);
+
+        return view('products.product')->with('total',$total)->with('quantity',$quantity)->with('myproducts',$this->myproducts)->with('product',$product);
     }
 
     /**
@@ -94,28 +103,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (Auth::check()) {
-            $user = Auth::user('id');
-        }
-        
-        $quantity = $request->input('quantity');
-        $prod = Product::findOrFail($id);
-
-        if($request->input('way') == 1) {
-            $quantity += 1;
-        } else {
-            $quantity -= 1;
-        }
-
-        $subtotal = $prod->price * $quantity;
-
-        if($quantity > 0) {
-            $user->products()->updateExistingPivot($id, ['quantity' => $quantity, 'subtotal' => $subtotal]);
-        } else {
-            $user->products()->detach($id);
-        }
-
-        return redirect('basket');
+       
     }
 
     /**
@@ -126,12 +114,6 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        if (Auth::check()) {
-            $user = Auth::user('id');
-        }
         
-        $user->products()->detach($id);
-
-        return redirect('basket');
     }
 }

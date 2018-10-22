@@ -11,22 +11,22 @@ use App\User;
 
 class OrderController extends Controller
 {
-	
-	// public function __construct() {
- //    	if (Auth::check()) {
- //            $this->user = Auth::user();
- //        } else {
- //        	return redirect('login');
- //        }
- //    }
+	protected $myproducts;
+
+	public function __construct() {
+    	
+        $this->middleware('auth');
+
+        $this->middleware(function ($request, $next) {
+                $this->myproducts = Auth::user()->products;
+                return $next($request);
+        });
+    }
 
 	public function index() {
-		if (Auth::check()) {
-            $user = Auth::user();
-        } else {
-        	return redirect('login');
-        }
-
+		
+        $user = Auth::user();
+        
 		$orders = Order::where('user_id', $user->id)->orderBy('created_at','desc')->get();
 
 		foreach($orders as $order) {
@@ -36,7 +36,14 @@ class OrderController extends Controller
 		$orderdetails = Orderdetail::whereIn('order_id', $orderId)->with('product')->get();
 		//var_dump($orderdetails); die();
 
-		return view('orders.orders', compact('orders', 'orderdetails'));
+        $ordersum = [];
+        foreach ($this->myproducts as $myproduct) {
+            $ordersum[] = $myproduct->pivot->subtotal;
+        }
+        $total = array_sum($ordersum);
+        $quantity = count($ordersum);
+
+		return view('orders.orders')->with('orders',$orders)->with('orderdetails',$orderdetails)->with('total',$total)->with('quantity',$quantity)->with('myproducts',$this->myproducts);
 	}
 
     public function store(Request $request) {

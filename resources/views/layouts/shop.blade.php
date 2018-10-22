@@ -53,7 +53,7 @@
 						<li><a href="#">FAQ</a></li>
 						<li class="dropdown default-dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">ENG <i class="fa fa-caret-down"></i></a>
-							<ul class="custom-menu">
+							<ul class="dropdown-menu custom-menu">
 								<li><a href="#">English (ENG)</a></li>
 								<li><a href="#">Russian (Ru)</a></li>
 								<li><a href="#">French (FR)</a></li>
@@ -62,7 +62,7 @@
 						</li>
 						<li class="dropdown default-dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">USD <i class="fa fa-caret-down"></i></a>
-							<ul class="custom-menu">
+							<ul class="dropdown-menu custom-menu">
 								<li><a href="#">USD ($)</a></li>
 								<li><a href="#">EUR (€)</a></li>
 							</ul>
@@ -107,10 +107,21 @@
 								<div class="header-btns-icon">
 									<i class="fa fa-user-o"></i>
 								</div>
-								<strong class="text-uppercase">My Account <i class="fa fa-caret-down"></i></strong>
+								@guest
+								@else
+								<strong class="text-uppercase">Hi {{Auth::user()->name}}<i class="fa fa-caret-down"></i></strong>
+								@endguest
 							</div>
-							<a href="#" class="text-uppercase">Login</a> / <a href="#" class="text-uppercase">Join</a>
-							<ul class="custom-menu">
+							@guest
+							<a href="{{route('login')}}" class="text-uppercase">Login</a> / <a href="{{route('register')}}" class="text-uppercase">Register</a>
+							@else
+							<a href="{{route('logout')}}" class="text-uppercase" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">Logout</a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                </form>
+							@endguest
+							<ul class="dropdown-menu custom-menu">
 								<li><a href="#"><i class="fa fa-user"></i> My Account</a></li>
 								<li><a href="#"><i class="fa fa-heart-o"></i> My Wishlist</a></li>
 								<li><a href="#"><i class="fa fa-exchange"></i> Compare</a></li>
@@ -122,17 +133,17 @@
 						<!-- /Account -->
 
 						<!-- Cart -->
-						<li class="header-cart dropdown default-dropdown">
-							<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+						<li class="header-cart dropdown default-dropdown" id="cartTrial">
+							<a class="dropdown-toggle" id="cart" data-toggle="dropdown" aria-expanded="false">
 								<div class="header-btns-icon">
 									<i class="fa fa-shopping-cart"></i>
-									<span class="qty">3</span>
+									<span class="qty">{{$quantity}}</span>
 								</div>
 								<strong class="text-uppercase">My Cart:</strong>
 								<br>
 								<span>{{$total}}</span>
 							</a>
-							<div class="custom-menu">
+							<div class="dropdown-menu custom-menu" aria-labelledby="cart">
 								<div id="shopping-cart">
 									<div class="shopping-cart-list">
 										@foreach($myproducts as $product)
@@ -144,12 +155,17 @@
 												<h3 class="product-price">{{$product->price}} <span class="qty">x{{$product->pivot->quantity}}</span></h3>
 												<h2 class="product-name"><a href="#">{{$product->name}}</a></h2>
 											</div>
-											<button class="cancel-btn"><i class="fa fa-trash"></i></button>
+											<form id="cartDestroy" action="{{route('basket.destroy', ['id'=>$product->id])}}" method="POST">
+												{{ csrf_field() }}
+
+												{{ method_field('DELETE') }}
+												<button type="submit" class="cancel-btn"><i class="fa fa-trash"></i></button>
+											</form>
 										</div>
 										@endforeach
 									<div class="shopping-cart-btns">
-										<button class="main-btn">View Cart</button>
-										<button class="primary-btn">Checkout <i class="fa fa-arrow-circle-right"></i></button>
+										<a href="{{route('basket.index')}}" class="main-btn">View Cart</a>
+										<a href="{{route('basket.index')}}" class="primary-btn">Order <i class="fa fa-arrow-circle-right"></i></a>
 									</div>
 								</div>
 							</div>
@@ -181,7 +197,7 @@
 					<ul class="category-list">
 						<li class="dropdown side-dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Women’s Clothing <i class="fa fa-angle-right"></i></a>
-							<div class="custom-menu">
+							<div class="dropdown-menu custom-menu">
 								<div class="row">
 									<div class="col-md-4">
 										<ul class="list-links">
@@ -235,7 +251,7 @@
 						</li>
 						<li><a href="#">Men’s Clothing</a></li>
 						<li class="dropdown side-dropdown"><a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Phones & Accessories <i class="fa fa-angle-right"></i></a>
-							<div class="custom-menu">
+							<div class="dropdown-menu custom-menu">
 								<div class="row">
 									<div class="col-md-4">
 										<ul class="list-links">
@@ -295,7 +311,7 @@
 						<li><a href="#">Consumer Electronics</a></li>
 						<li class="dropdown side-dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Jewelry & Watches <i class="fa fa-angle-right"></i></a>
-							<div class="custom-menu">
+							<div class="dropdown-menu custom-menu">
 								<div class="row">
 									<div class="col-md-4">
 										<ul class="list-links">
@@ -376,7 +392,7 @@
 					<span class="menu-header">Menu <i class="fa fa-bars"></i></span>
 					<ul class="menu-list">
 						<li><a href="#">Home</a></li>
-						<li><a href="#">Shop</a></li>
+						<li><a href="{{route('product.index')}}">Shop</a></li>
 						<li class="dropdown mega-dropdown"><a class="dropdown-toggle" id="womendropdown" aria-hashpopup="" data-toggle="dropdown" aria-expanded="false">Women <i class="fa fa-caret-down"></i></a>
 							<div class="dropdown-menu" aria-labelledby="">
 								<div class="row">
@@ -431,7 +447,7 @@
 							</div>
 						</li>
 						<li class="dropdown mega-dropdown full-width"><a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Men <i class="fa fa-caret-down"></i></a>
-							<div class="custom-menu">
+							<div class="dropdown-menu custom-menu">
 								<div class="row">
 									<div class="col-md-3">
 										<div class="hidden-sm hidden-xs">
@@ -518,7 +534,7 @@
 						</li>
 						<li><a href="#">Sales</a></li>
 						<li class="dropdown default-dropdown"><a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Pages <i class="fa fa-caret-down"></i></a>
-							<ul class="custom-menu">
+							<ul class="dropdown-menu custom-menu">
 								<li><a href="index.html">Home</a></li>
 								<li><a href="products.html">Products</a></li>
 								<li><a href="product-page.html">Product Details</a></li>

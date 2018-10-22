@@ -18,6 +18,7 @@
     menuList.toggleClass('open');
   });
 
+
   $(document).click(function(event) {
     if (!$(event.target).closest(responsiveNav).length) {
       if (responsiveNav.hasClass('open')) {
@@ -34,6 +35,8 @@
       }
     }
   });
+
+
 
   // HOME SLICK
   $('#home-slick').slick({

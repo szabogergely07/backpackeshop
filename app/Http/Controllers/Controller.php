@@ -13,27 +13,37 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    private $user;
-    private $total;
+    // protected $myproducts;
+    // protected $total;
+    // protected $quantity;
 
       public function __construct()
     {
         $this->middleware('auth');
+        
 
-        // $users = User::all();
-        // if (Auth::check()) {
-        //     $this->user = Auth::user('id');
-        // } else {
-        //     return redirect('login');
-        // }
-        // $myproducts = $this->user->products;
-        // $ordersum = [];
-        // foreach ($myproducts as $myproduct) {
-        //     $ordersum[] = $myproduct->pivot->subtotal;
-        // }
-        // $this->total = array_sum($ordersum);
+    
+
     }
 
+    // public function trial() {
+    //         $this->middleware(function ($request, $next) {
+    //         $this->myproducts = Auth::user();
+    //         return $next($request);
+    //     });
 
+    // var_dump($this->myproducts); die();
+        
+    //     $ordersum = [];
+    //     foreach ($this->myproducts as $myproduct) {
+    //         $ordersum[] = $myproduct->pivot->subtotal;
+    //     }
+    //     $this->total = array_sum($ordersum);
+    //     $this->quantity = count($ordersum);
+
+
+
+        
+    // }
 
 }

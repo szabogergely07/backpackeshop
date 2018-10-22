@@ -33,7 +33,7 @@
 										<td class="qty text-center">
 											<div style="width: 105px; margin: auto;" class="input-group">
           							<span class="input-group-btn">
-          								<form action="<?php echo e(route('product.update', ['id'=>$product->id])); ?>" method="POST">
+          								<form action="<?php echo e(route('basket.update', ['id'=>$product->id])); ?>" method="POST">
 													<?php echo csrf_field(); ?>
 
 													<?php echo e(method_field('PUT')); ?>
@@ -47,7 +47,7 @@
           							</span>
 												<input class="form-control" type="text" value="<?php echo e($product->pivot->quantity); ?>" readonly>
 											 	<span class="input-group-btn">
-											 		<form action="<?php echo e(route('product.update', ['id'=>$product->id])); ?>" method="POST">
+											 		<form action="<?php echo e(route('basket.update', ['id'=>$product->id])); ?>" method="POST">
 													<?php echo csrf_field(); ?>
 
 													<?php echo e(method_field('PUT')); ?>
@@ -63,7 +63,7 @@
   									</td>
 										<td class="total text-center"><strong class="primary-color"><?php echo e($product->pivot->subtotal); ?></strong></td>
 										<td class="text-right">
-											<form action="<?php echo e(route('product.destroy', ['id'=>$product->id])); ?>" method="POST">
+											<form action="<?php echo e(route('basket.destroy', ['id'=>$product->id])); ?>" method="POST">
 												<?php echo csrf_field(); ?>
 
 												<?php echo e(method_field('DELETE')); ?>

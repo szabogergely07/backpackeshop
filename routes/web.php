@@ -11,16 +11,17 @@
 |
 */
 
+Auth::routes();
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('user', 'UserController');
+//Route::resource('user', 'UserController');
 
 Route::resource('product', 'ProductController');
+Route::resource('basket', 'BasketController');
 
-
-Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -29,6 +30,4 @@ Route::post('/order/store', [
 ]);
 
 Route::get('order', ['as' => 'order.index', 'uses' => 'OrderController@index']);
-
-Route::get('basket', ['as' => 'user.basket', 'uses' => 'UserController@basket']);
 
