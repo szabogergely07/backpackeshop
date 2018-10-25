@@ -28,6 +28,9 @@ class OrderController extends Controller
         $user = Auth::user();
         
 		$orders = Order::where('user_id', $user->id)->orderBy('created_at','desc')->get();
+        
+        // Get the most recent order for the accordion to be opened
+        $recentOrder = Order::where('user_id', $user->id)->orderBy('created_at','desc')->first();
 
 		foreach($orders as $order) {
 			$orderId[] = $order->id;
@@ -43,7 +46,7 @@ class OrderController extends Controller
         $total = array_sum($ordersum);
         $quantity = count($ordersum);
 
-		return view('orders.orders')->with('orders',$orders)->with('orderdetails',$orderdetails)->with('total',$total)->with('quantity',$quantity)->with('myproducts',$this->myproducts);
+		return view('orders.orders')->with('orders',$orders)->with('orderdetails',$orderdetails)->with('total',$total)->with('quantity',$quantity)->with('myproducts',$this->myproducts)->with('recentOrderId',$recentOrder->id);
 	}
 
     public function store(Request $request) {

@@ -67,7 +67,7 @@
 										<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIzypLhvAMu6dquE0TWi6wXe_WL5kK2F4j466q5YY2A3v8NYi_" alt="">
 									</div>
 									<div class="product-body">
-										<h3 class="product-price">{{$product->price}} <del class="product-old-price">$45.00</del></h3>
+										<h3 class="product-price">€{{$product->price}} <del class="product-old-price">€45.00</del></h3>
 										<div class="product-rating">
 											<i class="fa fa-star"></i>
 											<i class="fa fa-star"></i>

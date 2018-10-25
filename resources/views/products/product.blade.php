@@ -50,7 +50,7 @@
 								<span class="sale">-20%</span>
 							</div>
 							<h2 class="product-name">{{$product->name}}</h2>
-							<h3 class="product-price">{{$product->price}} <del class="product-old-price">$45.00</del></h3>
+							<h3 class="product-price">€{{$product->price}} <del class="product-old-price">€45.00</del></h3>
 							<div>
 								<div class="product-rating">
 									<i class="fa fa-star"></i>

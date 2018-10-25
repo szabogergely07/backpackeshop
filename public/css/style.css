@@ -1732,3 +1732,15 @@ textarea.input {
 .dropdown-toggle::after {
   content: none;
 }
+
+.panel-default > .panel-heading {
+  background-color: #b3b3b3;
+}
+
+.panel-default > .panel-heading + .panel-collapse > .panel-body {
+  background-color: #ddd;
+}
+
+#orderDet {
+  width: 230px;
+}

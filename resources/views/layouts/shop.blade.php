@@ -128,9 +128,10 @@
 							@endguest
 							<ul class="dropdown-menu custom-menu">
 								<li><a href="#"><i class="fa fa-user"></i> My Account</a></li>
+								<li><a href="{{route('order.index')}}"><i class="fa fa-check"></i> My Orders</a></li>
 								<!-- <li><a href="#"><i class="fa fa-heart-o"></i> My Wishlist</a></li>
 								<li><a href="#"><i class="fa fa-exchange"></i> Compare</a></li>
-								<li><a href="#"><i class="fa fa-check"></i> Checkout</a></li>
+								
 								<li><a href="#"><i class="fa fa-unlock-alt"></i> Login</a></li>
 								<li><a href="#"><i class="fa fa-user-plus"></i> Create An Account</a></li> -->
 							</ul>
@@ -146,7 +147,7 @@
 								</div>
 								<strong class="text-uppercase">My Cart:</strong>
 								<br>
-								<span>{{isset($total) ? $total : ''}}</span>
+								<span>{{isset($total) ? "€$total" : ""}}</span>
 							</a>
 							<div class="dropdown-menu custom-menu" aria-labelledby="cart">
 								<div id="shopping-cart">
@@ -158,7 +159,7 @@
 												<img src="{{ asset('images/thumb-product01.jpg')}}" alt="">
 											</div>
 											<div class="product-body">
-												<h3 class="product-price">{{$product->price}} <span class="qty">x{{$product->pivot->quantity}}</span></h3>
+												<h3 class="product-price">€{{$product->price}} <span class="qty">x{{$product->pivot->quantity}}</span></h3>
 												<h2 class="product-name"><a href="#">{{$product->name}}</a></h2>
 											</div>
 											<form id="cartDestroy" action="{{route('basket.destroy', ['id'=>$product->id])}}" method="POST">
