@@ -15,30 +15,30 @@
 					<div class="col-md-6">
 						<div id="product-main-view">
 							<div class="product-view">
-								<img src="./img/main-product01.jpg" alt="">
+								<img src="{{asset('images/main-product01.jpg')}}" alt="">
 							</div>
 							<div class="product-view">
-								<img src="./img/main-product02.jpg" alt="">
+								<img src="{{asset('images/main-product02.jpg')}}" alt="">
 							</div>
 							<div class="product-view">
-								<img src="./img/main-product03.jpg" alt="">
+								<img src="{{asset('images/main-product03.jpg')}}" alt="">
 							</div>
 							<div class="product-view">
-								<img src="./img/main-product04.jpg" alt="">
+								<img src="{{asset('images/main-product04.jpg')}}" alt="">
 							</div>
 						</div>
 						<div id="product-view">
 							<div class="product-view">
-								<img src="./img/thumb-product01.jpg" alt="">
+								<img src="{{asset('images/thumb-product01.jpg')}}" alt="">
 							</div>
 							<div class="product-view">
-								<img src="./img/thumb-product02.jpg" alt="">
+								<img src="{{asset('images/thumb-product02.jpg')}}" alt="">
 							</div>
 							<div class="product-view">
-								<img src="./img/thumb-product03.jpg" alt="">
+								<img src="{{asset('images/thumb-product03.jpg')}}" alt="">
 							</div>
 							<div class="product-view">
-								<img src="./img/thumb-product04.jpg" alt="">
+								<img src="{{asset('images/thumb-product04.jpg')}}" alt="">
 							</div>
 						</div>
 					</div>

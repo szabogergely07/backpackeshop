@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
+use App\User;
 
 class HomeController extends Controller
 {
@@ -13,7 +16,13 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+
+        $this->middleware(function ($request, $next) {
+            if (Auth::user()) {
+                $this->myproducts = Auth::user()->products;   
+            }
+            return $next($request);
+        });
     }
 
     /**
@@ -23,6 +32,19 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $ordersum = [];
+        if (isset($this->myproducts)) {
+            foreach ($this->myproducts as $myproduct) {
+                $ordersum[] = $myproduct->pivot->subtotal;
+            }
+        } else {
+            $this->myproducts = [];
+        }
+
+        $total = array_sum($ordersum);
+        $quantity = count($ordersum);
+
+        $products = Product::all();
+        return view('home')->with('total',$total)->with('quantity',$quantity)->with('myproducts',$this->myproducts)->with('products',$products);
     }
 }

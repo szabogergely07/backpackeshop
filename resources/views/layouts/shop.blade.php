@@ -18,8 +18,9 @@
 	<!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> -->
 	
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
 	<link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+	
 	<link href="{{ asset('css/slick.css') }}" rel="stylesheet">
 	<link href="{{ asset('css/slick-theme.css') }}" rel="stylesheet">
 		<link href="{{ asset('css/nouislider.min.css') }}" rel="stylesheet">
@@ -44,7 +45,7 @@
 		<div id="top-header">
 			<div class="container">
 				<div class="pull-left">
-					<span>Welcome to E-shop!</span>
+					<span>Welcome to AllUNeed!</span>
 				</div>
 				<div class="pull-right">
 					<ul class="header-top-links">
@@ -79,8 +80,8 @@
 				<div class="pull-left">
 					<!-- Logo -->
 					<div class="header-logo">
-						<a class="logo" href="#">
-							<img src="{{ asset('images/logo.png')}}" alt="">
+						<a class="logo" href="{{route('home')}}">
+							<h2><span style="color: #F8694A;">ALL</span> U NEED</h2><!-- <img src="{{ asset('images/logonew.png')}}" alt=""> -->
 						</a>
 					</div>
 					<!-- /Logo -->
@@ -104,30 +105,34 @@
 						<!-- Account -->
 						<li class="header-account dropdown default-dropdown">
 							<div class="dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="true">
+									@guest
+								@else
 								<div class="header-btns-icon">
 									<i class="fa fa-user-o"></i>
 								</div>
-								@guest
-								@else
 								<strong class="text-uppercase">Hi {{Auth::user()->name}}<i class="fa fa-caret-down"></i></strong>
 								@endguest
 							</div>
 							@guest
-							<a href="{{route('login')}}" class="text-uppercase">Login</a> / <a href="{{route('register')}}" class="text-uppercase">Register</a>
+							<ul>
+							<li><a href="{{route('login')}}" class="text-uppercase"><i class="fa fa-unlock-alt"></i> Login</a></li>
+								<li><a href="{{route('register')}}" class="text-uppercase"><i class="fa fa-user-plus"></i> Register</a></li>
+							</ul>
 							@else
 							<a href="{{route('logout')}}" class="text-uppercase" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">Logout</a>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                 </form>
+                            
 							@endguest
 							<ul class="dropdown-menu custom-menu">
 								<li><a href="#"><i class="fa fa-user"></i> My Account</a></li>
-								<li><a href="#"><i class="fa fa-heart-o"></i> My Wishlist</a></li>
+								<!-- <li><a href="#"><i class="fa fa-heart-o"></i> My Wishlist</a></li>
 								<li><a href="#"><i class="fa fa-exchange"></i> Compare</a></li>
 								<li><a href="#"><i class="fa fa-check"></i> Checkout</a></li>
 								<li><a href="#"><i class="fa fa-unlock-alt"></i> Login</a></li>
-								<li><a href="#"><i class="fa fa-user-plus"></i> Create An Account</a></li>
+								<li><a href="#"><i class="fa fa-user-plus"></i> Create An Account</a></li> -->
 							</ul>
 						</li>
 						<!-- /Account -->
@@ -137,15 +142,16 @@
 							<a class="dropdown-toggle" id="cart" data-toggle="dropdown" aria-expanded="false">
 								<div class="header-btns-icon">
 									<i class="fa fa-shopping-cart"></i>
-									<span class="qty">{{$quantity}}</span>
+									<span class="qty">{{isset($quantity) ? $quantity : '0'}}</span>
 								</div>
 								<strong class="text-uppercase">My Cart:</strong>
 								<br>
-								<span>{{$total}}</span>
+								<span>{{isset($total) ? $total : ''}}</span>
 							</a>
 							<div class="dropdown-menu custom-menu" aria-labelledby="cart">
 								<div id="shopping-cart">
 									<div class="shopping-cart-list">
+										@if (!empty($myproducts) )
 										@foreach($myproducts as $product)
 										<div class="product product-widget">
 											<div class="product-thumb">
@@ -163,10 +169,15 @@
 											</form>
 										</div>
 										@endforeach
+										@else
+										<h4>Your basket is empty!</h4>
+										@endif
+									@if (!empty($myproducts) )
 									<div class="shopping-cart-btns">
 										<a href="{{route('basket.index')}}" class="main-btn">View Cart</a>
 										<a href="{{route('basket.index')}}" class="primary-btn">Order <i class="fa fa-arrow-circle-right"></i></a>
 									</div>
+									@endif
 								</div>
 							</div>
 						</li>
@@ -192,18 +203,18 @@
 		<div class="container">
 			<div id="responsive-nav">
 				<!-- category nav -->
-				<div class="category-nav show-on-click">
+				<div class="category-nav {{ !Request::is('/') ? 'show-on-click' : '' }}">
 					<span class="category-header">Categories <i class="fa fa-list"></i></span>
 					<ul class="category-list">
 						<li class="dropdown side-dropdown">
-							<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Women’s Clothing <i class="fa fa-angle-right"></i></a>
+							<a href="{{route('product.index')}}" class="dropdown-toggle" data-toggle="" aria-expanded="true">Shop now <i class="fa fa-angle-right"></i></a>
 							<div class="dropdown-menu custom-menu">
 								<div class="row">
 									<div class="col-md-4">
 										<ul class="list-links">
 											<li>
 												<h3 class="list-links-title">Categories</h3></li>
-											<li><a href="#">Women’s Clothing</a></li>
+											<li><a href="{{route('product.index')}}">New items</a></li>
 											<li><a href="#">Men’s Clothing</a></li>
 											<li><a href="#">Phones & Accessories</a></li>
 											<li><a href="#">Jewelry & Watches</a></li>
@@ -249,8 +260,8 @@
 								</div>
 							</div>
 						</li>
-						<li><a href="#">Men’s Clothing</a></li>
-						<li class="dropdown side-dropdown"><a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Phones & Accessories <i class="fa fa-angle-right"></i></a>
+						<li><a href="#">More categories are coming...</a></li>
+						<!-- <li class="dropdown side-dropdown"><a class="dropdown-toggle" data-toggle="" aria-expanded="true">Phones & Accessories <i class="fa fa-angle-right"></i></a>
 							<div class="dropdown-menu custom-menu">
 								<div class="row">
 									<div class="col-md-4">
@@ -306,8 +317,8 @@
 									</div>
 								</div>
 							</div>
-						</li>
-						<li><a href="#">Computer & Office</a></li>
+						</li> -->
+						<!-- <li><a href="#">Computer & Office</a></li>
 						<li><a href="#">Consumer Electronics</a></li>
 						<li class="dropdown side-dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Jewelry & Watches <i class="fa fa-angle-right"></i></a>
@@ -382,7 +393,7 @@
 							</div>
 						</li>
 						<li><a href="#">Bags & Shoes</a></li>
-						<li><a href="#">View All</a></li>
+						<li><a href="#">View All</a></li> -->
 					</ul>
 				</div>
 				<!-- /category nav -->
@@ -391,9 +402,9 @@
 				<div class="menu-nav">
 					<span class="menu-header">Menu <i class="fa fa-bars"></i></span>
 					<ul class="menu-list">
-						<li><a href="#">Home</a></li>
+						<li><a href="{{route('home')}}">Home</a></li>
 						<li><a href="{{route('product.index')}}">Shop</a></li>
-						<li class="dropdown mega-dropdown"><a class="dropdown-toggle" id="womendropdown" aria-hashpopup="" data-toggle="dropdown" aria-expanded="false">Women <i class="fa fa-caret-down"></i></a>
+						<!-- <li class="dropdown mega-dropdown"><a class="dropdown-toggle" id="womendropdown" aria-hashpopup="" data-toggle="dropdown" aria-expanded="false">Women <i class="fa fa-caret-down"></i></a>
 							<div class="dropdown-menu" aria-labelledby="">
 								<div class="row">
 									<div class="col-md-4">
@@ -540,7 +551,7 @@
 								<li><a href="product-page.html">Product Details</a></li>
 								<li><a href="checkout.html">Checkout</a></li>
 							</ul>
-						</li>
+						</li> -->
 					</ul>
 				</div>
 				<!-- menu nav -->
@@ -574,7 +585,7 @@
 							<div class="form-group">
 								<input class="input" placeholder="Enter Email Address">
 							</div>
-							<button class="primary-btn">Join Newslatter</button>
+							<button class="primary-btn">Join Newsletter</button>
 						</form>
 					</div>
 				</div>

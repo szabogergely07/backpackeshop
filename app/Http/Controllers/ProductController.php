@@ -14,10 +14,13 @@ class ProductController extends Controller
 
     public function __construct() {
         
-        $this->middleware('auth');
+        
 
         $this->middleware(function ($request, $next) {
-                $this->myproducts = Auth::user()->products;
+                if (Auth::user()) {
+                    $this->myproducts = Auth::user()->products;
+                   
+                }
                 return $next($request);
         });
     }
@@ -31,8 +34,11 @@ class ProductController extends Controller
     {
      
         $ordersum = [];
-        foreach ($this->myproducts as $myproduct) {
-            $ordersum[] = $myproduct->pivot->subtotal;
+
+        if (isset($this->myproducts)) {
+            foreach ($this->myproducts as $myproduct) {
+                $ordersum[] = $myproduct->pivot->subtotal;
+            }
         }
         $total = array_sum($ordersum);
         $quantity = count($ordersum);
@@ -72,8 +78,10 @@ class ProductController extends Controller
     public function show($id)
     {
         $ordersum = [];
-        foreach ($this->myproducts as $myproduct) {
-            $ordersum[] = $myproduct->pivot->subtotal;
+        if (isset($this->myproducts)) {
+            foreach ($this->myproducts as $myproduct) {
+                $ordersum[] = $myproduct->pivot->subtotal;
+            }
         }
         $total = array_sum($ordersum);
         $quantity = count($ordersum);

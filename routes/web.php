@@ -13,9 +13,7 @@
 
 Auth::routes();
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'HomeController@index')->name('home');
 
 //Route::resource('user', 'UserController');
 
@@ -23,7 +21,7 @@ Route::resource('product', 'ProductController');
 Route::resource('basket', 'BasketController');
 
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index');
 
 Route::post('/order/store', [
     'as' => 'order.store', 'uses' => 'OrderController@store'
