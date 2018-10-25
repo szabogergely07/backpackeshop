@@ -89,7 +89,8 @@ class BasketController extends Controller
             $user->products()->attach($product, ['quantity' => $quantity, 'subtotal' => $subtotal]);
         } else {
             $quantity += $oldproduct->pivot->quantity;
-            $user->products()->updateExistingPivot($product, ['quantity' => $quantity, 'subtotal' => $subtotal]);
+            $newsubtotal = $quantity * $prod->price;
+            $user->products()->updateExistingPivot($product, ['quantity' => $quantity, 'subtotal' => $newsubtotal]);
         }
         return redirect('product');
     }
@@ -125,12 +126,12 @@ class BasketController extends Controller
      */
     public function update(Request $request, $id)
     {
-         if (Auth::check()) {
+        if (Auth::check()) {
             $user = Auth::user('id');
         }
         
         $quantity = $request->input('quantity');
-        $prod = Product::findOrFail($id);
+        $product = Product::findOrFail($id);
 
         if($request->input('way') == 1) {
             $quantity += 1;
@@ -138,7 +139,7 @@ class BasketController extends Controller
             $quantity -= 1;
         }
 
-        $subtotal = $prod->price * $quantity;
+        $subtotal = $product->price * $quantity;
 
         if($quantity > 0) {
             $user->products()->updateExistingPivot($id, ['quantity' => $quantity, 'subtotal' => $subtotal]);
