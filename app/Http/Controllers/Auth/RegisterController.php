@@ -1,4 +1,4 @@
-<?php
+-<?php
 
 namespace App\Http\Controllers\Auth;
 
@@ -79,6 +79,9 @@ class RegisterController extends Controller
      */
     public function showRegistrationForm()
     {
-        return view('auth.register')->with('categories',$this->categories);
+        $myproducts = [];
+        return view('auth.register')
+        ->with('categories',$this->categories)
+        ->with('myproducts'$myproducts);
     }
 }
