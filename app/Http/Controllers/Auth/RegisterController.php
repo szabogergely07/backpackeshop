@@ -82,6 +82,6 @@ class RegisterController extends Controller
         $myproducts = [];
         return view('auth.register')
         ->with('categories',$this->categories)
-        ->with('myproducts'$myproducts);
+        ->with('myproducts',$myproducts);
     }
 }
