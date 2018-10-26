@@ -30,9 +30,9 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($pages=10)
     {
-     
+
         $ordersum = [];
 
         if (isset($this->myproducts)) {
@@ -43,7 +43,9 @@ class ProductController extends Controller
         $total = array_sum($ordersum);
         $quantity = count($ordersum);
 
-        $products = Product::all();
+        $products = Product::paginate($pages);
+
+
         return view('products.products')->with('total',$total)->with('quantity',$quantity)->with('myproducts',$this->myproducts)->with('products',$products);
 
     }

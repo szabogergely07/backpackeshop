@@ -147,6 +147,17 @@
     });
   }
 
+
+  $(function(){
+    $('#dynamicSelect').on('click', function () {
+        var id = $(this).val(); // get selected value
+        if (id) { 
+            window.location = "/product/pages/"+id; 
+        }
+        return false;
+    });
+  });
+
   
 
 })(jQuery);

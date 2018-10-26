@@ -1,11 +1,20 @@
 <?php
 
-$url = parse_url(getenv("CLEARDB_DATABASE_URL"));
+if(config('app.env') === 'production') {
+    $url = parse_url(getenv("CLEARDB_DATABASE_URL"));
 
-$host = $url["host"];
-$username = $url["user"];
-$password = $url["pass"];
-$database = substr($url["path"], 1);
+    $host = $url["host"];
+    $username = $url["user"];
+    $password = $url["pass"];
+    $database = substr($url["path"], 1);
+} else {
+    $url = null;
+
+    $host = null;
+    $username = null;
+    $password = null;
+    $database = null;
+}
 
 return [
 

@@ -33,19 +33,22 @@
 						<div class="pull-right">
 							<div class="page-filter">
 								<span class="text-uppercase">Show:</span>
-								<select class="input">
-										<option value="0">10</option>
-										<option value="1">20</option>
-										<option value="2">30</option>
-									</select>
-							</div>
+								<select name="numberofpages" id="dynamicSelect" class="input">
+									<option value="10">10</option>
+									<option value="20">20</option>
+									<option value="30">30</option>
+									<option value="2">2</option>
+								</select>
+							
 							<ul class="store-pages">
-								<li><span class="text-uppercase">Page:</span></li>
-								<li class="active">1</li>
-								<li><a href="#">2</a></li>
+								<!-- <li><span class="text-uppercase">Page: </span></li> -->
+								{{ $products->links() }}
+								<!-- <li class="active">1</li> -->
+								<!-- <li><a href="#">2</a></li>
 								<li><a href="#">3</a></li>
-								<li><a href="#"><i class="fa fa-caret-right"></i></a></li>
+								<li><a href="#"><i class="fa fa-caret-right"></i></a></li> -->
 							</ul>
+							</div>
 						</div>
 					</div>
 					<!-- /store top filter -->
@@ -131,11 +134,12 @@
 									</select>
 							</div>
 							<ul class="store-pages">
-								<li><span class="text-uppercase">Page:</span></li>
-								<li class="active">1</li>
-								<li><a href="#">2</a></li>
+								<!-- <li><span class="text-uppercase">Page: </span></li> -->
+								{{ $products->links() }}
+								<!-- <li class="active">1</li> -->
+								<!-- <li><a href="#">2</a></li>
 								<li><a href="#">3</a></li>
-								<li><a href="#"><i class="fa fa-caret-right"></i></a></li>
+								<li><a href="#"><i class="fa fa-caret-right"></i></a></li> -->
 							</ul>
 						</div>
 					</div>
