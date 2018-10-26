@@ -6,9 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use App\User;
+use App\Models\Category;
 
 class HomeController extends Controller
 {
+    protected $categories;
+
     /**
      * Create a new controller instance.
      *
@@ -23,6 +26,7 @@ class HomeController extends Controller
             }
             return $next($request);
         });
+        $this->categories = Category::all();    
     }
 
     /**
@@ -45,6 +49,11 @@ class HomeController extends Controller
         $quantity = count($ordersum);
 
         $products = Product::all();
-        return view('home')->with('total',$total)->with('quantity',$quantity)->with('myproducts',$this->myproducts)->with('products',$products);
+        return view('home')
+            ->with('total',$total)
+            ->with('quantity',$quantity)
+            ->with('myproducts',$this->myproducts)
+            ->with('products',$products)
+            ->with('categories',$this->categories);
     }
 }

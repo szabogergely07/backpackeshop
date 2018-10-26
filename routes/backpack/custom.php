@@ -13,5 +13,6 @@ Route::group([
 ], function () { // custom admin routes
 	CRUD::resource('customer', 'CustomerCrudController');
 	CRUD::resource('product', 'ProductCrudController');
+	CRUD::resource('category', 'CategoryCrudController');
 	
 }); // this should be the absolute last line of this file

@@ -21,6 +21,8 @@ Route::resource('product', 'ProductController');
 
 Route::get('product/pages/{pages}', 'ProductController@index');
 
+Route::get('product/category/{id}', ['as' => 'product.category', 'uses' => 'ProductController@categories']);
+
 Route::resource('basket', 'BasketController');
 
 

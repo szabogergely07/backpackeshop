@@ -5,7 +5,7 @@
 <div class="col-md-4">
 	<div class="order-summary clearfix">
 		<div class="section-title">
-			<h3 class="title">Your orders</h3>
+			<h3 class="title">{{ !$orders->count() ? 'You do not have any orders yet!' : 'Your orders' }}</h3>
 		</div>
 		@foreach($orders as $order)
 		<div class="panel-group" id="accordion">

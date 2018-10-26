@@ -8,19 +8,22 @@ use App\Orderdetail;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use App\User;
+use App\Models\Category;
 
 class OrderController extends Controller
 {
 	protected $myproducts;
+    protected $categories;
 
 	public function __construct() {
-    	
+         
         $this->middleware('auth');
 
         $this->middleware(function ($request, $next) {
                 $this->myproducts = Auth::user()->products;
                 return $next($request);
         });
+        $this->categories = Category::all();    
     }
 
 	public function index() {
@@ -30,14 +33,23 @@ class OrderController extends Controller
 		$orders = Order::where('user_id', $user->id)->orderBy('created_at','desc')->get();
         
         // Get the most recent order for the accordion to be opened
-        $recentOrder = Order::where('user_id', $user->id)->orderBy('created_at','desc')->first();
+        $recent = Order::where('user_id', $user->id)->orderBy('created_at','desc')->first();
 
-		foreach($orders as $order) {
-			$orderId[] = $order->id;
-		}
+        $recentOrder = null;
+        if ((array)$recent) {
+        
+        $recentOrder = $recent->id;
+        }
 
-		$orderdetails = Orderdetail::whereIn('order_id', $orderId)->with('product')->get();
-		//var_dump($orderdetails); die();
+        if ((array)$orders) {
+            $orderId = [];
+    		foreach($orders as $order) {
+    			$orderId[] = $order->id;
+    		}
+
+    		$orderdetails = Orderdetail::whereIn('order_id', $orderId)->with('product')->get();
+    		//var_dump($orderdetails); die();
+        }
 
         $ordersum = [];
         foreach ($this->myproducts as $myproduct) {
@@ -46,7 +58,15 @@ class OrderController extends Controller
         $total = array_sum($ordersum);
         $quantity = count($ordersum);
 
-		return view('orders.orders')->with('orders',$orders)->with('orderdetails',$orderdetails)->with('total',$total)->with('quantity',$quantity)->with('myproducts',$this->myproducts)->with('recentOrderId',$recentOrder->id);
+		return view('orders.orders')
+            ->with('orders',$orders)
+            ->with('orderdetails',$orderdetails)
+            ->with('total',$total)
+            ->with('quantity',$quantity)
+            ->with('myproducts',$this->myproducts)
+            ->with('recentOrderId',$recentOrder)
+            ->with('categories',$this->categories);
+
 	}
 
     public function store(Request $request) {

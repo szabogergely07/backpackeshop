@@ -6,11 +6,13 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use App\User;
+use App\Models\Category;
 
 class BasketController extends Controller
 {
 
     protected $myproducts;
+    protected $categories;
 
     public function __construct() {
         
@@ -20,6 +22,7 @@ class BasketController extends Controller
                 $this->myproducts = Auth::user()->products;
                 return $next($request);
         });
+        $this->categories = Category::all();    
     }
 
 
@@ -48,7 +51,11 @@ class BasketController extends Controller
         $total = array_sum($ordersum);
         $quantity = count($ordersum);
 
-        return view('user.basket')->with('myproducts',$this->myproducts)->with('total',$total)->with('quantity',$quantity);
+        return view('user.basket')
+            ->with('myproducts',$this->myproducts)
+            ->with('total',$total)
+            ->with('quantity',$quantity)
+            ->with('categories',$this->categories);
     }
 
     /**

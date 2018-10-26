@@ -4,9 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\CrudTrait;
-use App\User;
 
-class Product extends Model
+class Category extends Model
 {
     use CrudTrait;
 
@@ -16,13 +15,11 @@ class Product extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'products';
+    protected $table = 'categories';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     // protected $guarded = ['id'];
-    protected $fillable = [
-        'name', 'description', 'price', 'photo', 'category_id'
-    ];
+    protected $fillable = ['name'];
     // protected $hidden = [];
     // protected $dates = [];
 
@@ -37,18 +34,8 @@ class Product extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function users() {
-       return $this->belongsToMany('App\User')
-        ->withPivot('quantity', 'subtotal')
-        ->withTimestamps();
-    }
-
-    public function orderdetails() {
-        return $this->hasMany('App\Orderdetail');
-    }
-
-    public function category() {
-        return $this->belongsTo('App\Models\Category');
+    public function products() {
+        return $this->hasMany('App\Models\Product');
     }
 
     /*

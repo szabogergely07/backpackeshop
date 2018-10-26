@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\Category;
 
 class LoginController extends Controller
 {
@@ -30,6 +30,8 @@ class LoginController extends Controller
      */
     protected $redirectTo = '/product';
 
+    protected $categories;
+
     /**
      * Create a new controller instance.
      *
@@ -38,7 +40,7 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
-
+        $this->categories = Category::all();
     }
 
     /**
@@ -49,7 +51,9 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         $myproducts = [];
-        return view('auth.login')->with('myproducts', $myproducts);
+        return view('auth.login')
+            ->with('myproducts', $myproducts)
+            ->with('categories', $this->categories);
     }
 
      /**
@@ -64,6 +68,6 @@ class LoginController extends Controller
 
         $request->session()->invalidate();
 
-        return $this->loggedOut($request) ?: redirect('/home');
+        return $this->loggedOut($request) ?: redirect('/');
     }
 }

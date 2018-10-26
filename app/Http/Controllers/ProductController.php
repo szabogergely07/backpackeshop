@@ -6,16 +6,18 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use App\User;
+use App\Models\Category;
 
 class ProductController extends Controller
 {
 
     private $myproducts;
+    private $categories;
 
     public function __construct() {
         
         
-
+        $this->categories = Category::all();
         $this->middleware(function ($request, $next) {
                 if (Auth::user()) {
                     $this->myproducts = Auth::user()->products;
@@ -23,6 +25,7 @@ class ProductController extends Controller
                 }
                 return $next($request);
         });
+
     }
 
     /**
@@ -46,8 +49,35 @@ class ProductController extends Controller
         $products = Product::paginate($pages);
 
 
-        return view('products.products')->with('total',$total)->with('quantity',$quantity)->with('myproducts',$this->myproducts)->with('products',$products);
+        return view('products.products')
+            ->with('total',$total)
+            ->with('quantity',$quantity)
+            ->with('myproducts',$this->myproducts)
+            ->with('products',$products)
+            ->with('categories',$this->categories);
 
+    }
+
+    public function categories($category) {
+        $ordersum = [];
+
+        if (isset($this->myproducts)) {
+            foreach ($this->myproducts as $myproduct) {
+                $ordersum[] = $myproduct->pivot->subtotal;
+            }
+        }
+        $total = array_sum($ordersum);
+        $quantity = count($ordersum);
+
+        $products = Product::where('category_id',$category)->paginate(10);
+
+
+        return view('products.products')
+            ->with('total',$total)
+            ->with('quantity',$quantity)
+            ->with('myproducts',$this->myproducts)
+            ->with('products',$products)
+            ->with('categories',$this->categories);
     }
 
     /**
@@ -90,7 +120,12 @@ class ProductController extends Controller
 
         $product = Product::findorFail($id);
 
-        return view('products.product')->with('total',$total)->with('quantity',$quantity)->with('myproducts',$this->myproducts)->with('product',$product);
+        return view('products.product')
+            ->with('total',$total)
+            ->with('quantity',$quantity)
+            ->with('myproducts',$this->myproducts)
+            ->with('product',$product)
+            ->with('categories',$this->categories);
     }
 
     /**

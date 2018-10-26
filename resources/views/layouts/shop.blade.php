@@ -170,14 +170,15 @@
 											</form>
 										</div>
 										@endforeach
-										@else
-										<h4>Your basket is empty!</h4>
+										
 										@endif
-									@if (!empty($myproducts) )
+									@if ( $myproducts->count() )
 									<div class="shopping-cart-btns">
 										<a href="{{route('basket.index')}}" class="main-btn">View Cart</a>
 										<a href="{{route('basket.index')}}" class="primary-btn">Order <i class="fa fa-arrow-circle-right"></i></a>
 									</div>
+									@else
+									<h4>Your basket is empty!</h4>
 									@endif
 								</div>
 							</div>
@@ -261,7 +262,9 @@
 								</div>
 							</div>
 						</li>
-						<li><a href="#">More categories are coming...</a></li>
+						@foreach ($categories as $category)
+							<li><a href="{{route('product.category', ['id'=>$category->id])}}">{{$category->name}}</a></li>
+						@endforeach
 						<!-- <li class="dropdown side-dropdown"><a class="dropdown-toggle" data-toggle="" aria-expanded="true">Phones & Accessories <i class="fa fa-angle-right"></i></a>
 							<div class="dropdown-menu custom-menu">
 								<div class="row">
