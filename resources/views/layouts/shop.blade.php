@@ -172,7 +172,7 @@
 										@endforeach
 										
 										@endif
-									@if ( $myproducts->count() )
+									@if ( $myproducts )
 									<div class="shopping-cart-btns">
 										<a href="{{route('basket.index')}}" class="main-btn">View Cart</a>
 										<a href="{{route('basket.index')}}" class="primary-btn">Order <i class="fa fa-arrow-circle-right"></i></a>
