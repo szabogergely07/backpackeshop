@@ -86,7 +86,7 @@
 							<div class="product-btns">
 								<div class="qty-input">
 									<span class="text-uppercase">QTY: </span>
-									<input min="1" class="input" type="number" name="quantity">
+									<input min="1" value="1" class="input" type="number" name="quantity">
 								</div>
 								<button type="submit" class="primary-btn add-to-cart"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
 							
