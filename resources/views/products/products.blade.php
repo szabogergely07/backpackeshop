@@ -72,11 +72,7 @@
 									<div class="product-body">
 										<h3 class="product-price">€{{$product->price}} <del class="product-old-price">€45.00</del></h3>
 										<div class="product-rating">
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star-o empty"></i>
+											<div class="star-ratings-sprite"><span style="width:{{$product->product_rating}}%" class="star-ratings-sprite-rating"></span></div>
 										</div>
 										<h2 class="product-name"><a href="#">{{$product->name}}</a></h2>
 	

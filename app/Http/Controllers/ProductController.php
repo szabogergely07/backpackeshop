@@ -7,6 +7,7 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Models\Category;
+use App\Review;
 
 class ProductController extends Controller
 {
@@ -46,8 +47,7 @@ class ProductController extends Controller
         $total = array_sum($ordersum);
         $quantity = count($ordersum);
 
-        $products = Product::paginate($pages);
-
+        $products = Product::with('reviews')->paginate($pages);
 
         return view('products.products')
             ->with('total',$total)
@@ -120,12 +120,32 @@ class ProductController extends Controller
 
         $product = Product::findorFail($id);
 
+        // To show paginated reviews
+        $reviews = Review::where('product_id',$id)->paginate(3);
+        
+        // Get the average rating of a product as a percentage
+        $prodReviews = Review::where('product_id',$id)->get();
+        $reviewCount = $prodReviews->count();
+        $sum = [];
+        foreach ($prodReviews as $prodReview) {
+            $sum[] = $prodReview->rating;
+        }
+
+        if (!empty($sum)) {
+            $average = (array_sum($sum) / count($sum)) / 5 * 100;
+        } else {
+            $average = 0;
+        }
+
         return view('products.product')
             ->with('total',$total)
             ->with('quantity',$quantity)
             ->with('myproducts',$this->myproducts)
             ->with('product',$product)
-            ->with('categories',$this->categories);
+            ->with('categories',$this->categories)
+            ->with('reviews',$reviews)
+            ->with('average',$average)
+            ->with('reviewCount',$reviewCount);
     }
 
     /**

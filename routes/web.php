@@ -25,6 +25,8 @@ Route::get('product/category/{id}', ['as' => 'product.category', 'uses' => 'Prod
 
 Route::resource('basket', 'BasketController');
 
+Route::resource('review', 'ReviewController');
+
 
 Route::get('/home', 'HomeController@index');
 

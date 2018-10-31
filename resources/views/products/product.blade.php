@@ -52,14 +52,8 @@
 							<h2 class="product-name">{{$product->name}}</h2>
 							<h3 class="product-price">€{{$product->price}} <del class="product-old-price">€45.00</del></h3>
 							<div>
-								<div class="product-rating">
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star-o empty"></i>
-								</div>
-								<a href="#">3 Review(s) / Add Review</a>
+								<div class="star-ratings-sprite"><span style="width:{{$average}}%" class="star-ratings-sprite-rating"></span></div>
+								<a href="#tab2">{{$reviewCount}} Review(s) / Add Review</a>
 							</div>
 							<p><strong>Availability:</strong> In Stock</p>
 							<p><strong>Brand:</strong> E-SHOP</p>
@@ -104,7 +98,7 @@
 							<ul class="tab-nav">
 								<li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
 								<li><a data-toggle="tab" href="#tab1">Details</a></li>
-								<li><a data-toggle="tab" href="#tab2">Reviews (3)</a></li>
+								<li><a data-toggle="tab" href="#tab2">Reviews ({{$reviewCount}})</a></li>
 							</ul>
 							<div class="tab-content">
 								<div id="tab1" class="tab-pane fade in active">
@@ -114,82 +108,57 @@
 								<div id="tab2" class="tab-pane fade in">
 
 									<div class="row">
+										<!-- Review -->
+										
 										<div class="col-md-6">
 											<div class="product-reviews">
+												@foreach ($reviews as $review)
 												<div class="single-review">
 													<div class="review-heading">
-														<div><a href="#"><i class="fa fa-user-o"></i> John</a></div>
-														<div><a href="#"><i class="fa fa-clock-o"></i> 27 DEC 2017 / 8:0 PM</a></div>
+														<div><a href="#"><i class="fa fa-user-o"></i> {{$review->user->name}}</a></div>
+														<div><a href="#"><i class="fa fa-clock-o"></i> {{$review->created_at}}</a></div>
 														<div class="review-rating pull-right">
+															<?php for ($i=$review->rating;$i>0;$i--) { ?> 
+																
 															<i class="fa fa-star"></i>
-															<i class="fa fa-star"></i>
-															<i class="fa fa-star"></i>
-															<i class="fa fa-star"></i>
-															<i class="fa fa-star-o empty"></i>
-														</div>
-													</div>
-													<div class="review-body">
-														<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Duis aute
-															irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-													</div>
-												</div>
+															<?php } ?>
 
-												<div class="single-review">
-													<div class="review-heading">
-														<div><a href="#"><i class="fa fa-user-o"></i> John</a></div>
-														<div><a href="#"><i class="fa fa-clock-o"></i> 27 DEC 2017 / 8:0 PM</a></div>
-														<div class="review-rating pull-right">
-															<i class="fa fa-star"></i>
-															<i class="fa fa-star"></i>
-															<i class="fa fa-star"></i>
-															<i class="fa fa-star"></i>
+															<?php for($i=$review->rating;$i<5;$i++) { ?>
 															<i class="fa fa-star-o empty"></i>
+															<?php } ?>
 														</div>
 													</div>
 													<div class="review-body">
-														<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Duis aute
-															irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+														<p>{{$review->body}}</p>
 													</div>
 												</div>
-
-												<div class="single-review">
-													<div class="review-heading">
-														<div><a href="#"><i class="fa fa-user-o"></i> John</a></div>
-														<div><a href="#"><i class="fa fa-clock-o"></i> 27 DEC 2017 / 8:0 PM</a></div>
-														<div class="review-rating pull-right">
-															<i class="fa fa-star"></i>
-															<i class="fa fa-star"></i>
-															<i class="fa fa-star"></i>
-															<i class="fa fa-star"></i>
-															<i class="fa fa-star-o empty"></i>
-														</div>
-													</div>
-													<div class="review-body">
-														<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Duis aute
-															irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-													</div>
-												</div>
+												@endforeach	
+												
+											
 
 												<ul class="reviews-pages">
-													<li class="active">1</li>
+													<!-- <li class="active">1</li>
 													<li><a href="#">2</a></li>
 													<li><a href="#">3</a></li>
-													<li><a href="#"><i class="fa fa-caret-right"></i></a></li>
+													<li><a href="#"><i class="fa fa-caret-right"></i></a></li> -->
+													{{ $reviews->links() }}
 												</ul>
 											</div>
+
 										</div>
+										
+
+
+										@guest
+										@else
 										<div class="col-md-6">
 											<h4 class="text-uppercase">Write Your Review</h4>
 											<p>Your email address will not be published.</p>
-											<form class="review-form">
+											<form action="{{route('review.store')}}" method="POST" class="review-form">
+												@csrf
+												<input type="hidden" name="productId" value="{{$product->id}}">
 												<div class="form-group">
-													<input class="input" type="text" placeholder="Your Name" />
-												</div>
-												<div class="form-group">
-													<input class="input" type="email" placeholder="Email Address" />
-												</div>
-												<div class="form-group">
-													<textarea class="input" placeholder="Your review"></textarea>
+													<textarea name="body" class="input" placeholder="Your review"></textarea>
 												</div>
 												<div class="form-group">
 													<div class="input-rating">
@@ -203,9 +172,10 @@
 														</div>
 													</div>
 												</div>
-												<button class="primary-btn">Submit</button>
+												<button type="submit" class="primary-btn">Submit</button>
 											</form>
 										</div>
+										@endguest
 									</div>
 
 
