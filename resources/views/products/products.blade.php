@@ -64,15 +64,16 @@
 									<div class="product-thumb">
 										<div class="product-label">
 											<span>New</span>
-											<span class="sale">-20%</span>
+											<span class="sale">-{{floor(100-($product->price/($product->price*1.5)*100))}}%</span>
 										</div>
 										<a href="{{route('product.show', ['id'=>$product->id])}}" class="main-btn quick-view"><i class="fa fa-search-plus"></i> Quick view</a>
-										<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIzypLhvAMu6dquE0TWi6wXe_WL5kK2F4j466q5YY2A3v8NYi_" alt="">
+										<img src="{{$product->photo}}" alt="">
 									</div>
 									<div class="product-body">
-										<h3 class="product-price">€{{$product->price}} <del class="product-old-price">€45.00</del></h3>
+										<h3 class="product-price">€{{$product->price}} <del class="product-old-price">€{{$product->price*1.5}}</del></h3>
 										<div class="product-rating">
 											<div class="star-ratings-sprite"><span style="width:{{$product->product_rating}}%" class="star-ratings-sprite-rating"></span></div>
+
 										</div>
 										<h2 class="product-name"><a href="#">{{$product->name}}</a></h2>
 	

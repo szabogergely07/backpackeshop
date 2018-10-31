@@ -15,7 +15,7 @@
 					<div class="col-md-6">
 						<div id="product-main-view">
 							<div class="product-view">
-								<img src="{{asset('images/main-product01.jpg')}}" alt="">
+								<img src="{{$product->photo}}" alt="">
 							</div>
 							<div class="product-view">
 								<img src="{{asset('images/main-product02.jpg')}}" alt="">
@@ -29,7 +29,7 @@
 						</div>
 						<div id="product-view">
 							<div class="product-view">
-								<img src="{{asset('images/thumb-product01.jpg')}}" alt="">
+								<img src="{{$product->photo}}" alt="">
 							</div>
 							<div class="product-view">
 								<img src="{{asset('images/thumb-product02.jpg')}}" alt="">
@@ -47,13 +47,13 @@
 						<div class="product-body">
 							<div class="product-label">
 								<span>New</span>
-								<span class="sale">-20%</span>
+								<span class="sale">-{{floor(100-($product->price/($product->price*1.5)*100))}}%</span>
 							</div>
 							<h2 class="product-name">{{$product->name}}</h2>
-							<h3 class="product-price">€{{$product->price}} <del class="product-old-price">€45.00</del></h3>
+							<h3 class="product-price">€{{$product->price}} <del class="product-old-price">€{{$product->price*1.5}}</del></h3>
 							<div>
 								<div class="star-ratings-sprite"><span style="width:{{$average}}%" class="star-ratings-sprite-rating"></span></div>
-								<a href="#tab2">{{$reviewCount}} Review(s) / Add Review</a>
+								<a href="#tab2">{{$reviewCount}} Review{{$reviewCount > 1 ? 's' : ''}} / Add Review</a>
 							</div>
 							<p><strong>Availability:</strong> In Stock</p>
 							<p><strong>Brand:</strong> E-SHOP</p>
@@ -102,8 +102,7 @@
 							</ul>
 							<div class="tab-content">
 								<div id="tab1" class="tab-pane fade in active">
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-										irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+									<p>{{$product->description}}</p>
 								</div>
 								<div id="tab2" class="tab-pane fade in">
 

@@ -127,8 +127,11 @@
                             
 							@endguest
 							<ul class="dropdown-menu custom-menu">
-								<li><a href="#"><i class="fa fa-user"></i> My Account</a></li>
+								@guest
+								@else
+								<li><a href="{{route('user.edit',['id'=>Auth::user()->id])}}"><i class="fa fa-user"></i> My Account</a></li>
 								<li><a href="{{route('order.index')}}"><i class="fa fa-check"></i> My Orders</a></li>
+								@endguest
 								<!-- <li><a href="#"><i class="fa fa-heart-o"></i> My Wishlist</a></li>
 								<li><a href="#"><i class="fa fa-exchange"></i> Compare</a></li>
 								
