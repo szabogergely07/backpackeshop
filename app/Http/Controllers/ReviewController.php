@@ -38,6 +38,13 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'body' => 'required|max:1000',
+            'rating' => 'required',
+            'productId' => 'required'
+        ]);
+
+
         $body = $request->input('body');
         $rating = $request->input('rating');
         $product = $request->input('productId');
@@ -69,7 +76,7 @@ class ReviewController extends Controller
         $prodRating->product_rating = $average;
         $prodRating->save();
 
-        return redirect()->route('product.show', ['id' => $product]);
+        //return redirect()->route('product.show', ['id' => $product]);
 
     }
 

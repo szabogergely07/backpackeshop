@@ -159,5 +159,44 @@
   });
 
   
+$('#submitReview').on('click', function(e){
+  e.preventDefault();
+  $('#bodyError').empty();
+  $('#bodyRating').empty();  
+
+  var body = $('#body').val();
+  var rating = $('.review-star:checked').val();
+  var productId = $('#productId').val();
+
+  axios.post('/backpack/public/review', {
+    body: body,
+    rating: rating,
+    productId: productId
+    
+  })
+  .then(function (response) {    
+   
+    if(response.status == 200) {
+      $("form").trigger("reset");
+    }
+  })
+  .catch(function (error) {
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+    
+      var errors = error.response.data.errors;
+      $('#bodyError').html(errors.body);
+      $('#bodyRating').html(errors.rating);  
+    
+    }
+    
+  });
+ 
+})
+
+
+
+
 
 })(jQuery);

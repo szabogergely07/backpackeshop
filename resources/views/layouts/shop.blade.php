@@ -625,7 +625,7 @@
 <script src="{{ asset('js/nouislider.min.js') }}" defer></script>
 <script src="{{ asset('js/jquery.zoom.min.js') }}" defer></script>
 <script src="{{ asset('js/main.js') }}" defer></script>
-
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 
 </body>

@@ -126,17 +126,7 @@ class ProductController extends Controller
         // Get the average rating of a product as a percentage
         $prodReviews = Review::where('product_id',$id)->get();
         $reviewCount = $prodReviews->count();
-        $sum = [];
-        foreach ($prodReviews as $prodReview) {
-            $sum[] = $prodReview->rating;
-        }
-
-        if (!empty($sum)) {
-            $average = (array_sum($sum) / count($sum)) / 5 * 100;
-        } else {
-            $average = 0;
-        }
-
+        
         return view('products.product')
             ->with('total',$total)
             ->with('quantity',$quantity)
@@ -144,7 +134,6 @@ class ProductController extends Controller
             ->with('product',$product)
             ->with('categories',$this->categories)
             ->with('reviews',$reviews)
-            ->with('average',$average)
             ->with('reviewCount',$reviewCount);
     }
 

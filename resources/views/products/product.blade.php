@@ -52,7 +52,7 @@
 							<h2 class="product-name">{{$product->name}}</h2>
 							<h3 class="product-price">€{{$product->price}} <del class="product-old-price">€{{$product->price*1.5}}</del></h3>
 							<div>
-								<div class="star-ratings-sprite"><span style="width:{{$average}}%" class="star-ratings-sprite-rating"></span></div>
+								<div class="star-ratings-sprite"><span style="width:{{$product->product_rating}}%" class="star-ratings-sprite-rating"></span></div>
 								<a href="#tab2">{{$reviewCount}} Review{{$reviewCount > 1 ? 's' : ''}} / Add Review</a>
 							</div>
 							<p><strong>Availability:</strong> In Stock</p>
@@ -152,26 +152,36 @@
 										@else
 										<div class="col-md-6">
 											<h4 class="text-uppercase">Write Your Review</h4>
-											<p>Your email address will not be published.</p>
-											<form action="{{route('review.store')}}" method="POST" class="review-form">
-												@csrf
-												<input type="hidden" name="productId" value="{{$product->id}}">
+											
+											<form class="review-form">
+												
+												<input id="productId" type="hidden" name="productId" value="{{$product->id}}">
 												<div class="form-group">
-													<textarea name="body" class="input" placeholder="Your review"></textarea>
+													<textarea id="body" name="body" class="input form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="Your review" value="{{ old('body') }}"></textarea>
+													
+                                    					<span class="invalid-feedback" role="alert">
+                                        				<strong id="bodyError"></strong>
+                                    					</span>
+                                					
 												</div>
 												<div class="form-group">
 													<div class="input-rating">
 														<strong class="text-uppercase">Your Rating: </strong>
 														<div class="stars">
-															<input type="radio" id="star5" name="rating" value="5" /><label for="star5"></label>
-															<input type="radio" id="star4" name="rating" value="4" /><label for="star4"></label>
-															<input type="radio" id="star3" name="rating" value="3" /><label for="star3"></label>
-															<input type="radio" id="star2" name="rating" value="2" /><label for="star2"></label>
-															<input type="radio" id="star1" name="rating" value="1" /><label for="star1"></label>
+															<input class="review-star" type="radio" id="star5" name="rating" value="5" /><label for="star5"></label>
+															<input class="review-star" type="radio" id="star4" name="rating" value="4" /><label for="star4"></label>
+															<input class="review-star" type="radio" id="star3" name="rating" value="3" /><label for="star3"></label>
+															<input class="review-star" type="radio" id="star2" name="rating" value="2" /><label for="star2"></label>
+															<input class="review-star" type="radio" id="star1" name="rating" value="1" /><label for="star1"></label>
 														</div>
 													</div>
+													
+                                    					<span class="invalid-feedback" role="alert">
+                                        				<strong id="bodyRating"></strong>
+                                    					</span>
+                                					
 												</div>
-												<button type="submit" class="primary-btn">Submit</button>
+												<button type="" id="submitReview" class="primary-btn">Submit</button>
 											</form>
 										</div>
 										@endguest
