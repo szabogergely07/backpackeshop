@@ -159,7 +159,7 @@
 										@foreach($myproducts as $product)
 										<div class="product product-widget">
 											<div class="product-thumb">
-												<img src="{{ asset('images/thumb-product01.jpg')}}" alt="">
+												<img src="{{$product->photo}}" alt="">
 											</div>
 											<div class="product-body">
 												<h3 class="product-price">€{{$product->price}} <span class="qty">x{{$product->pivot->quantity}}</span></h3>

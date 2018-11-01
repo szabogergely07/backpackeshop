@@ -21,7 +21,7 @@
 
 				<?php $__currentLoopData = $myproducts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 				<tr>
-					<td class="thumb"><img src="./img/thumb-product01.jpg" alt=""></td>
+					<td class="thumb"><img src="{{$product->photo}}" alt=""></td>
 					<td class="details">
 						<a href="#"><?php echo e($product->name); ?></a>
 						<ul>
