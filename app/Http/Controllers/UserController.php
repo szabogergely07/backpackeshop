@@ -16,6 +16,7 @@ class UserController extends Controller
 
     public function __construct() {
             
+        $this->middleware('auth');            
         $this->categories = Category::all();
         $this->middleware(function ($request, $next) {
                 if (Auth::user()) {
@@ -78,24 +79,28 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::find($id);
+        if ($id == Auth::user()->id) {
+            $user = User::find($id);
 
-        $ordersum = [];
+            $ordersum = [];
 
-        if (isset($this->myproducts)) {
-            foreach ($this->myproducts as $myproduct) {
-                $ordersum[] = $myproduct->pivot->subtotal;
+            if (isset($this->myproducts)) {
+                foreach ($this->myproducts as $myproduct) {
+                    $ordersum[] = $myproduct->pivot->subtotal;
+                }
             }
-        }
-        $total = array_sum($ordersum);
-        $quantity = count($ordersum);
+            $total = array_sum($ordersum);
+            $quantity = count($ordersum);
 
-        return view('user.edit')
-            ->with('total',$total)
-            ->with('quantity',$quantity)
-            ->with('myproducts',$this->myproducts)
-            ->with('categories',$this->categories)
-            ->with('user',$user);
+            return view('user.edit')
+                ->with('total',$total)
+                ->with('quantity',$quantity)
+                ->with('myproducts',$this->myproducts)
+                ->with('categories',$this->categories)
+                ->with('user',$user);
+        } else {
+            return view('errors.403');
+        }
 
     }
 
