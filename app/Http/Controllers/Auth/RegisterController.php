@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use App\Models\Category;
+use Illuminate\Support\Facades\Redis;
+use App\Models\Product;
 
 class RegisterController extends Controller
 {
@@ -31,6 +33,7 @@ class RegisterController extends Controller
      */
     protected $redirectTo = '/';
     protected $categories;
+    protected $redis;
     /**
      * Create a new controller instance.
      *
@@ -40,6 +43,7 @@ class RegisterController extends Controller
     {
         $this->middleware('guest');
         $this->categories = Category::all();
+        $this->redis = Redis::connection();
     }
 
     /**
@@ -79,9 +83,22 @@ class RegisterController extends Controller
      */
     public function showRegistrationForm()
     {
-        $myproducts = [];
+        $idWithQ = [];
+        $quantity = -1;
+        $idWithQ = $this->redis->hgetall('product');
+        $ids = array_keys($idWithQ);
+        $myproducts = Product::whereIn('id',$ids)->get();
+
+        $total = [];
+        foreach ($myproducts as $product) {
+            $total[] = $idWithQ[$product->id] * $product->price;    
+        }
+        $total = array_sum($total);
+        
         return view('auth.register')
         ->with('categories',$this->categories)
-        ->with('myproducts',$myproducts);
+        ->with('myproducts',$myproducts)
+        ->with('idWithQ',$idWithQ)
+        ->with('total',$total);
     }
 }

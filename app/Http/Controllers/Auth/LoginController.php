@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Category;
+use Illuminate\Support\Facades\Redis;
+use App\Models\Product;
 
 class LoginController extends Controller
 {
@@ -31,6 +33,7 @@ class LoginController extends Controller
     protected $redirectTo = '/product';
 
     protected $categories;
+    protected $redis;
 
     /**
      * Create a new controller instance.
@@ -39,6 +42,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
+        $this->redis = Redis::connection();
         $this->middleware('guest')->except('logout');
         $this->categories = Category::all();
     }
@@ -50,10 +54,23 @@ class LoginController extends Controller
      */
     public function showLoginForm()
     {
-        $myproducts = [];
+        $idWithQ = [];
+        $quantity = -1;
+        $idWithQ = $this->redis->hgetall('product');
+        $ids = array_keys($idWithQ);
+        $myproducts = Product::whereIn('id',$ids)->get();
+
+        $total = [];
+        foreach ($myproducts as $product) {
+            $total[] = $idWithQ[$product->id] * $product->price;    
+        }
+        $total = array_sum($total);
+        
         return view('auth.login')
             ->with('myproducts', $myproducts)
-            ->with('categories', $this->categories);
+            ->with('categories', $this->categories)
+            ->with('idWithQ',$idWithQ)
+            ->with('total',$total);
     }
 
      /**
@@ -67,6 +84,8 @@ class LoginController extends Controller
         $this->guard()->logout();
 
         $request->session()->invalidate();
+
+        $this->redis->flushDB();
 
         return $this->loggedOut($request) ?: redirect('/');
     }

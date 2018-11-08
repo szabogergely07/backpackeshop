@@ -38,21 +38,21 @@
 
 								<?php echo e(method_field('PUT')); ?>
 
-									<input type="hidden" name="quantity" value="<?php echo e($product->pivot->quantity); ?>">
+									<input type="hidden" name="quantity" value="<?php echo e(isset($product->pivot->quantity) ? $product->pivot->quantity : 0); ?>">
 									<input type="hidden" name="way" value="2">
 						<button type="submit" class="btn btn-danger btn-number" data-type="" data-field="">
 						<span class="glyphicon glyphicon-minus"></span>
 						</button>
 					</form>
 					</span>
-							<input class="form-control" type="text" value="<?php echo e($product->pivot->quantity); ?>" readonly>
+							<input class="form-control" type="text" value="<?php echo e(isset($product->pivot->quantity) ? $product->pivot->quantity : 0); ?>" readonly>
 						 	<span class="input-group-btn">
 						 		<form action="<?php echo e(route('basket.update', ['id'=>$product->id])); ?>" method="POST">
 								<?php echo csrf_field(); ?>
 
 								<?php echo e(method_field('PUT')); ?>
 
-									<input type="hidden" name="quantity" value="<?php echo e($product->pivot->quantity); ?>">
+									<input type="hidden" name="quantity" value="<?php echo e(isset($product->pivot->quantity) ? $product->pivot->quantity : 0); ?>">
 									<input type="hidden" name="way" value="1">
 						<button type="submit" class="btn btn-success btn-number" data-type="" data-field="">
 						<span class="glyphicon glyphicon-plus"></span>
@@ -61,7 +61,7 @@
 					</span>
 					</div>
 					</td>
-					<td class="total text-center"><strong class="primary-color">€{{$product->pivot->subtotal}}</strong></td>
+					<td class="total text-center"><strong class="primary-color">€{{isset($product->pivot->subtotal) ? $product->pivot->subtotal : 0}}</strong></td>
 					<td class="text-right">
 						<form action="<?php echo e(route('basket.destroy', ['id'=>$product->id])); ?>" method="POST">
 							<?php echo csrf_field(); ?>

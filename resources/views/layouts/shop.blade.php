@@ -146,7 +146,7 @@
 							<a class="dropdown-toggle" id="cart" data-toggle="dropdown" aria-expanded="false">
 								<div class="header-btns-icon">
 									<i class="fa fa-shopping-cart"></i>
-									<span class="qty">{{isset($quantity) ? $quantity : '0'}}</span>
+									<span class="qty">{{isset($quantity) && $quantity != -1 ? $quantity : count($idWithQ)}}</span>
 								</div>
 								<strong class="text-uppercase">My Cart:</strong>
 								<br>
@@ -162,8 +162,8 @@
 												<img src="{{$product->photo}}" alt="">
 											</div>
 											<div class="product-body">
-												<h3 class="product-price">€{{$product->price}} <span class="qty">x{{$product->pivot->quantity}}</span></h3>
-												<h2 class="product-name"><a href="#">{{$product->name}}</a></h2>
+												<h3 class="product-price">€{{$product->price}} <span class="qty">x{{isset($product->pivot->quantity) ? $product->pivot->quantity : $idWithQ[$product->id]}}</span></h3>
+												<h2 class="product-name"><a href="{{route('product.show',['id'=>$product->id])}}">{{$product->name}}</a></h2>
 											</div>
 											<form id="cartDestroy" action="{{route('basket.destroy', ['id'=>$product->id])}}" method="POST">
 												{{ csrf_field() }}
@@ -176,7 +176,7 @@
 										
 										@endif
 									@guest
-									<h4>Please login to shop!</h4>
+									<h4>Please <a href="{{route('login')}}" style="color:red;">login</a> to order!</h4>
 									@elseif ( $myproducts->count() )
 									<div class="shopping-cart-btns">
 										<a href="{{route('basket.index')}}" class="main-btn">View Cart</a>

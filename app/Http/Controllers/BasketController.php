@@ -7,25 +7,19 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Models\Category;
+use Illuminate\Support\Facades\Redis;
 
 class BasketController extends Controller
 {
-
+    protected $redis;
     protected $myproducts;
     protected $categories;
 
     public function __construct() {
-        
-        $this->middleware('auth');
-
-        $this->middleware(function ($request, $next) {
-                $this->myproducts = Auth::user()->products;
-                return $next($request);
-        });
-        $this->categories = Category::all();    
+        //$this->middleware('auth');
+        $this->redis = Redis::connection();
+      
     }
-
-
 
 
     /**
@@ -35,27 +29,35 @@ class BasketController extends Controller
      */
     public function index()
     {
-        $this->middleware('auth');
+     
 
-        $this->middleware(function ($request, $next) {
-                $this->myproducts = Auth::user()->products;
-                return $next($request);
-        });
+        $this->categories = Category::all();    
+         $total = 0;
+         $quantity = 0;
 
+        if (Auth::check()) {
+            
+            $this->myproducts = Auth::user()->products;
 
-
-       $ordersum = [];
-        foreach ($this->myproducts as $myproduct) {
-            $ordersum[] = $myproduct->pivot->subtotal;
+           $ordersum = [];
+            foreach ($this->myproducts as $myproduct) {
+                $ordersum[] = $myproduct->pivot->subtotal;
+            }
+            $total = array_sum($ordersum);
+            $quantity = count($ordersum);
+        } else {
+            return redirect('login');
         }
-        $total = array_sum($ordersum);
-        $quantity = count($ordersum);
 
         return view('user.basket')
             ->with('myproducts',$this->myproducts)
             ->with('total',$total)
             ->with('quantity',$quantity)
             ->with('categories',$this->categories);
+        
+
+     
+        
     }
 
     /**
@@ -76,29 +78,44 @@ class BasketController extends Controller
      */
     public function store(Request $request)
     {
-        if (Auth::check()) {
-            $user = Auth::user('id');
-        }
+
 
         $product = $request->input('id');
         $quantity = $request->input('quantity');
         
+
         $prod = Product::findOrFail($product);
         $subtotal = $prod->price * $quantity;
         //var_dump($subtotal); die();
 
-        $oldproduct = $user->products()
-            -> wherePivot('product_id', $product)->first();
-            //var_dump($oldproduct->pivot->quantity); die();
-        
 
-        if(!$oldproduct) {
-            $user->products()->attach($product, ['quantity' => $quantity, 'subtotal' => $subtotal]);
+        if (Auth::check()) {
+            $user = Auth::user('id');
+
+            $oldproduct = $user->products()
+                -> wherePivot('product_id', $product)->first();
+                //var_dump($oldproduct->pivot->quantity); die();
+            
+
+            if(!$oldproduct) {
+                $user->products()->attach($product, ['quantity' => $quantity, 'subtotal' => $subtotal]);
+            } else {
+                $quantity += $oldproduct->pivot->quantity;
+                $newsubtotal = $quantity * $prod->price;
+                $user->products()->updateExistingPivot($product, ['quantity' => $quantity, 'subtotal' => $newsubtotal]);
+            }
+            
         } else {
-            $quantity += $oldproduct->pivot->quantity;
-            $newsubtotal = $quantity * $prod->price;
-            $user->products()->updateExistingPivot($product, ['quantity' => $quantity, 'subtotal' => $newsubtotal]);
+            $this->redis->hset('product',$product,$quantity);
+            $this->redis->expire('product',3600);
+            //$this->redis->set('id:'.$product,$quantity);
+            //var_dump($this->redis->type(5)); die();
+
+            // $this->redis->hSet($product, 'quantity', $quantity);
+            // $this->redis->hSet($product, 'id', $product);
+
         }
+
         return redirect('product');
     }
 

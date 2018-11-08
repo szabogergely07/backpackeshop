@@ -8,11 +8,12 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 use App\User;
+use Illuminate\Support\Facades\Redis;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-
+    //protected $redis;
     // protected $myproducts;
     // protected $total;
     // protected $quantity;
@@ -20,7 +21,7 @@ class Controller extends BaseController
       public function __construct()
     {
         // $this->middleware('auth');
-        
+          //$this->redis = Redis::connect();
 
     
 
